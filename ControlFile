@@ -1,0 +1,46 @@
+Pour les explications : http://steve-lyon.blogspot.fr/2011/08/using-sql-loader-to-load-csv-data-into.html
+
+
+On a 3 trucs a foutre dans la table "Client"
+
+123,Ditmann,Elia,24 rue Bidon,Nice,687654323,e.rand@rand.fr
+124,Santana,Carlos,2 av Lepantes,Antibes,451628391,C.cs@rand.com
+125,Dufly,Patrick,55 rue sesame,Nice,7876545678,DP@wanadoo.com
+
+
+Il faut mettre la partie suivante dans un .ctl 
+
+----------------------------------------------------------------------
+-- SQL-Loader Control File
+----------------------------------------------------------------------
+OPTIONS 
+   ( skip=1                                                
+   , rows=30                                            
+   , errors=10                                             
+-- , load=5                                                
+   , direct=false                                          
+   , parallel=false                                        
+   )
+----------------------------------------------------------------------
+LOAD DATA
+   INFILE        'table.csv'                          
+   BADFILE       'LoadResults_BAD.log'                     
+   DISCARDFILE   'LoadResults_DISCARDED.log'               
+   APPEND                                                  
+   INTO TABLE     CLIENTS                       
+-- WHEN           id_num <> ''                             
+----------------------------------------------------------------------
+Fields Terminated    by ","            --a changer selon les separateurs de champs, ici on a des virgules                     
+Optionally Enclosed  by '"'                                
+Trailing Nullcols                                          
+----------------------------------------------------------------------
+                                                           
+   ( ID_CLIENT
+   , NOM                                         
+   , PRENOM  
+   , ADRESSE                    
+   , VILLE
+   , TELEPHONE
+   , EMAIL
+   )
+----------------------------------------------------------------------
